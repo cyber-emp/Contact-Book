@@ -25,6 +25,53 @@
 
     <script src="config.js"></script>
     <script>
+
+        // event listener for the submit button
+        document.getElementById('submitForm').addEventListener('click', submitForm);
+        // event listener for the home button
+        document.getElementById('homeLink').addEventListener('click', homeLink);
+        // this gathers all the information in the form and sends it to the server
+        
+        function submitForm(e){
+            
+            // this prevents the default behavior.  It stops it from reloading the page
+            e.preventDefault();
+            
+            // Form data object
+            const form = new FormData(document.querySelector('#editForm'));
+            
+            // Add the API key to the form data. Coming from config.js
+            form.append('apiKey', apiKey);
+            
+            // make sure this is correct because browser will not catch this error and it will be a nightmare to debug
+            //Calling the fetch function to send the form data to the server
+            fetch(rootPath + 'controller/insert-contact/',{
+                method: 'POST',
+                // the *.* means it will accept all types of data
+                headers: {'Accept': 'application/json, *.*'},
+                
+                body: form
+            })
+            //We submit for to server and it will send back a 1 for success or send back an error message
+            .then(function(response) {
+                return response.text();
+            })
+            .then(function(data) {
+                if(data == "1") {
+                    alert("Contact added.");
+                    homeLink();
+                }else{
+                    alert(data);
+                    homeLink();
+                }
+            })
+                
+        }
+        
+        function homeLink(){
+            // this parameter is telling that index.html should open in the same tab/window
+            window.open("index.html", "_self");
+        }
     </script>
 </body>
 
