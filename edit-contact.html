@@ -22,7 +22,7 @@
 
         <label for="avatar" id="avatarLabel" hidden>Change profile image</label><br />
         <input type="file" name="avatar" id="avatar" hidden><br />
-        
+
         <br />
         <button type="submit" id="submitForm" hidden>Submit</button>
     </form>
@@ -34,6 +34,27 @@
     <script src="config.js"></script>
     <script>
 
+        var id = getId();
+
+        //this will display the ID in the console of the browser
+        console.log("The ID is: " + id);
+
+        function getId(){
+            //this function returns the full URL of the current page
+            var url = window.location.href;
+            //this function searches the url for the = character
+            var pos = url.search("=");
+            //this function returns the part of the URL after the = character. so just the ID number we want
+            var id = url.slice(pos + 1);
+            return id;
+        }
+
+        function getContact() {
+            fetch(rootPath + 'controller/get-contacts/?id=' + id)
+                then (function(response) {
+                    return response.json();
+                })
+            }
     </script>
 </body>
 
