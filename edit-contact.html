@@ -40,7 +40,8 @@
         document.getElementById("editContact").addEventListener("click", editContact);
         //this will call the function to submit the edit form
         document.getElementById("submitForm").addEventListener("click", submitForm);
-
+        // this will call the function to delete the contact
+        document.getElementById("deleteContact").addEventListener("click", deleteContact);
         function getId() {
             //this function returns the full URL of the current page
             var url = window.location.href;
@@ -121,6 +122,7 @@
                         homeLink();
                     }
                 })
+            }
 
             //this will delete the contact
             function deleteContact() {
@@ -136,7 +138,6 @@
                             if (data == "1") {
                                 homeLink();
                             }
-                            // if user cancels, it will display the same page it just remains
                             else {
                                 alert(data);
                             }
