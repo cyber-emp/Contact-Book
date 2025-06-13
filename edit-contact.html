@@ -38,9 +38,8 @@
         document.getElementById("homeLink").addEventListener("click", homeLink);
         // this will call the function to edit the contact
         document.getElementById("editContact").addEventListener("click", editContact);
-
-        //this will display the ID in the console of the browser
-        console.log("The ID is: " + id);
+        //this will call the function to submit the edit form
+        document.getElementById("submitForm").addEventListener("click", submitForm);
 
         function getId() {
             //this function returns the full URL of the current page
@@ -60,7 +59,7 @@
                 .then(function (data) {
                     // Display the contact info
                     displayOutput(data);
-                    console.log(data);
+
 
                 })
         }
@@ -88,17 +87,63 @@
             document.getElementById("avatar").hidden = false;
             document.getElementById("submitForm").hidden = false;
         }
-        
-        function submitForm(e){
+
+        function submitForm(e) {
             //This is used to prevent the form from reloading the page
             e.preventDefault();
-            
-            // gets all the information from all the fields captured in the form
-            const form = new FormData (document.querySelector("#editForm"));
 
+            // gets all the information from all the fields captured in the form
+            const form = new FormData(document.querySelector("#editForm"));
+
+            // adding 2 additional values to the form data that is not currently in the form
             form.append('apiKey', apiKey);
             form.append('id', id);
-        }
+
+            //fetch function calls the controller to update the contact
+            fetch(rootPath + 'controller/edit-contact/', {
+                method: 'POST',
+                headers: { 'accept': 'application/json' },
+                body: form
+            })
+                // response gets converted to text
+                .then(function (response) {
+                    return response.text();
+                })
+                // if text coming back is 1, then the contact was edited successfully
+                .then(function (data) {
+                    if (data == "1") {
+                        alert("Contact edited.");
+                        homeLink();
+                    }
+                    //if there was an error, it will display the error message
+                    else {
+                        alert(data);
+                        homeLink();
+                    }
+                })
+
+            //this will delete the contact
+            function deleteContact() {
+                // this will post a confirm delete message
+                var confirmDelete = confirm("Delete contact. Are you sure?");
+                // if the user confirms, then it will call the delete function
+                if (confirmDelete == true) {
+                    fetch(rootPath + 'controller/delete-contact/?id=' + id)
+                        .then(function (response) {
+                            return response.text();
+                        })
+                        .then(function (data) {
+                            if (data == "1") {
+                                homeLink();
+                            }
+                            // if user cancels, it will display the same page it just remains
+                            else {
+                                alert(data);
+                            }
+                        })
+                }
+            }
+
     </script>
 </body>
 
